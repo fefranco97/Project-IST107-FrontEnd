@@ -1,0 +1,9 @@
+.inputs {
+    margin-bottom: 12px;
+}
+
+.ingredients-container {
+    max-height: 200px;
+    overflow-y: auto;
+    padding-right: 5px;
+}
