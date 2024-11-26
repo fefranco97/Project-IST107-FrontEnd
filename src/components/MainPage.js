@@ -3,26 +3,38 @@ import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
 import Button from 'react-bootstrap/Button'
 import DialogAddRecipe from './DialogAddRecipe'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import RecipesList from './RecipesList'
 import DialogSignUp from './DialogSignUp'
 import DialogLogIn from './DialogLogIn'
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 import RecipeDetail from './RecipeDetail'
 import AccountDetail from './AccountDetail'
+import {getAllRecipes, getRecipe} from "../api/recipe";
 
 function MainPage() {
   const [showAddDialog, setShowAddDialog] = useState(false)
   const [showSignUpDialog, setShowSignUpDialog] = useState(false)
   const [showLogInDialog, setShowLogInDialog] = useState(false)
 
-  const [recipes, setRecipes] = useState([
-    { id: 1, name: 'Burger', img: 'img.png', shortDescription: 'Most popular burger in the world' },
-    { id: 2, name: 'Burger', img: 'img.png', shortDescription: 'Most popular burger in the world' },
-    { id: 3, name: 'Burger', img: 'img.png', shortDescription: 'Most popular burger in the world' },
-    { id: 4, name: 'Burger', img: 'img.png', shortDescription: 'Most popular burger in the world' },
-    { id: 5, name: 'Burger', img: 'img.png', shortDescription: 'Most popular burger in the world' },
-  ])
+  const [recipes, setRecipes] = useState([])
+
+  useEffect(() => {
+    const data = async () => {
+      const resp = await getAllRecipes();
+      if(resp) {
+        setRecipes(resp.data)
+      }
+    }
+
+    const recipe = async () => {
+      const resp = await getRecipe("12f66150-13b4-4490-b421-8c0f5130053e");
+      console.log(resp)
+    }
+
+    data().then((data) => {})
+    recipe().then(() => {})
+  }, [])
 
   const handleCloseAddDialog = () => {
     setShowAddDialog(false)

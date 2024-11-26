@@ -2,11 +2,25 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import Dropdown from 'react-bootstrap/Dropdown';
-import {useState} from "react";
+import {useState, useEffect} from "react";
 import { BsTrash, BsPlusCircle } from 'react-icons/bs';
 import './css/dialog.css'
+import {getIngredients} from "../api/recipe";
 
 export default function DialogAddRecipe({show, handleClose}) {
+
+   /* useEffect(() => {
+        const ingredientsForSelect = async () => {
+            //const response = getIngredients();
+            console.log(response)
+        }
+
+        ingredientsForSelect().then((res) => {
+            console.log(res)
+        })
+    })
+
+    */
 
     const [ingredients, setIngredients] = useState([]);
     const handleAddNewIngredients = () => {
@@ -17,6 +31,12 @@ export default function DialogAddRecipe({show, handleClose}) {
         setIngredients(ingredients.filter((_, i) => i !== index))
     }
 
+    const handleCreateRecipe = async () => {
+        const title = document.getElementById('name').value;
+        const description = document.getElementById('instruction').value;
+        const short = document.getElementById('short').value;
+    }
+
     return(
         <>
             <Modal show={show} onHide={handleClose} size="xl">
@@ -25,10 +45,15 @@ export default function DialogAddRecipe({show, handleClose}) {
                 </Modal.Header>
                 <Modal.Body>
                     <Form>
-                        <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                        <Form.Group className="mb-3">
                             <Form.Control
                                 id="name"
                                 placeholder="Name"
+                                type="text"
+                            />
+                            <Form.Control
+                                id="short"
+                                placeholder="Short Description"
                                 type="text"
                             />
                             <Form.Control
@@ -143,6 +168,7 @@ export default function DialogAddRecipe({show, handleClose}) {
                             className="mb-3"
                         >
                             <Form.Control
+                                id="instruction"
                                 as="textarea"
                                 placeholder="Description"
                                 rows={3}

@@ -2,6 +2,14 @@
   text-align: center;
 }
 
+:root {
+  --bs-primary: #f5e0b3;
+}
+
+.my-primary-btn {
+  background: #f5e0b3;
+}
+
 
 
 
