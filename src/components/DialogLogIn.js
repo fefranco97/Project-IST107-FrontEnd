@@ -18,7 +18,7 @@ export default function DialogLogIn({ show, handleClose }) {
     try {
       await LoginWithEmail(email, password)
       handleClose()
-      toast.success('User created successfully')
+      toast.success('Login successfully')
     } catch (error) {
       toast.error(error.message)
       console.error(error)
@@ -29,7 +29,7 @@ export default function DialogLogIn({ show, handleClose }) {
     try {
       await SignInWithGoogle()
       handleClose()
-      toast.success('User created successfully')
+      toast.success('Login successfully')
     } catch (error) {
       toast.error(error.message)
       console.error(error)
