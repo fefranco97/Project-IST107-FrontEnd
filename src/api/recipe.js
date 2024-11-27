@@ -8,8 +8,6 @@ async function getAllRecipes() {
 
 
     const url = `https://getAllRecipes${config.apiBaseUrl.production}`
-        //? `${config.apiBaseUrl.development}/createUser`
-    // `https://createUser${config.apiBaseUrl.production}`
 
     const response = await fetch(url, options)
     const responseData = await response.json()
@@ -27,7 +25,7 @@ async function getRecipe(id) {
         headers: { 'Content-Type': 'application/json' },
     }
 
-    const url = `${config.apiBaseUrl.production}/getRecipeDetail/${id}`;
+    const url = `https://getRecipeDetails${config.apiBaseUrl.production}?id=${id}`;
     console.log("Request URL:", url);
 
     const response = await fetch(url, options)

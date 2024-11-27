@@ -16,15 +16,12 @@ export default function DialogAddRecipe({ show, handleClose }) {
             try {
                 const response = await getIngredients();
                 setAvailableIngredients(response.data);
-                console.log('USESTATE',availableIngredients);
             } catch (error) {
                 console.error("Failed to load ingredients:", error.message);
             }
         };
 
-        ingredientsForSelect().then((res) => {
-            console.log(res)
-        });
+        ingredientsForSelect().then((res) => {});
     }, []);
 
     const handleAddNewIngredients = () => {
@@ -90,11 +87,9 @@ export default function DialogAddRecipe({ show, handleClose }) {
                                         </Dropdown.Toggle>
 
                                         <Dropdown.Menu>
-                                            {availableIngredients.map((ingredient, i) => (
-                                                <Dropdown.Item key={i}>
-                                                    {ingredient.name}
-                                                </Dropdown.Item>
-                                            ))}
+                                            <Dropdown.Item>Apple</Dropdown.Item>
+                                            <Dropdown.Item>Orange</Dropdown.Item>
+                                            <Dropdown.Item>Banana</Dropdown.Item>
                                         </Dropdown.Menu>
                                     </Dropdown>
                                     <Form.Control
