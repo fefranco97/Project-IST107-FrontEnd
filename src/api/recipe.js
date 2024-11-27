@@ -27,7 +27,8 @@ async function getRecipe(id) {
         headers: { 'Content-Type': 'application/json' },
     }
 
-    const url = `https://getRecipeDetail?id=${id}${config.apiBaseUrl.production}`;
+    const url = `${config.apiBaseUrl.production}/getRecipeDetail/${id}`;
+    console.log("Request URL:", url);
 
     const response = await fetch(url, options)
     const responseData = await response.json()
@@ -46,14 +47,11 @@ async function getIngredients() {
     }
 
     const url = `https://ingredients${config.apiBaseUrl.production}`
-    //? `${config.apiBaseUrl.development}/createUser`
-    // `https://createUser${config.apiBaseUrl.production}`
 
     const response = await fetch(url, options)
     const responseData = await response.json()
 
     if (responseData.status !== 'success') {
-        console.log(responseData);
         throw new Error(responseData.message)
     }
 
