@@ -5,12 +5,19 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import { useState, useEffect } from "react";
 import { BsTrash, BsPlusCircle } from 'react-icons/bs';
 import './css/dialog.css';
-import { getIngredients } from "../api/recipe";
+import { getIngredients, createRecipe } from "../api/recipe";
 import PortalDropDownMenu from './PortalDropDownMenu';
 
 export default function DialogAddRecipe({ show, handleClose }) {
+    const [recipeName, setRecipeName] = useState('');
+    const [shortDescription, setShortDescription] = useState('');
+    const [image, setImage] = useState(null);
+    const [numberOfServings, setNumberOfServings] = useState('');
+    const [description, setDescription] = useState('');
     const [ingredients, setIngredients] = useState([{}]);
     const [availableIngredients, setAvailableIngredients] = useState([]);
+    const [selectedIngredients, setSelectedIngredients] = useState([]);
+    const [selectedUnits, setSelectedUnits] = useState([]);
 
     useEffect(() => {
         const ingredientsForSelect = async () => {
@@ -21,25 +28,70 @@ export default function DialogAddRecipe({ show, handleClose }) {
                 console.error("Failed to load ingredients:", error.message);
             }
         };
-
         ingredientsForSelect();
     }, []);
 
-
     const handleAddNewIngredients = () => {
         setIngredients([...ingredients, {}]);
-    }
-
+        setSelectedIngredients([...selectedIngredients, '']);
+        setSelectedUnits([...selectedUnits, '']);
+    };
 
     const handleDeleteIngredients = (index) => {
         if (ingredients.length > 1) {
             setIngredients(ingredients.filter((_, i) => i !== index));
+            setSelectedIngredients(selectedIngredients.filter((_, i) => i !== index));
+            setSelectedUnits(selectedUnits.filter((_, i) => i !== index));
         }
-    }
+    };
+
+    const handleSelectIngredient = (index, ingredientName) => {
+        const newSelectedIngredients = [...selectedIngredients];
+        newSelectedIngredients[index] = ingredientName;
+        setSelectedIngredients(newSelectedIngredients);
+    };
+
+    const handleSelectUnit = (index, unit) => {
+        const newSelectedUnits = [...selectedUnits];
+        newSelectedUnits[index] = unit;
+        setSelectedUnits(newSelectedUnits);
+    };
+
+    const resetForm = () => {
+        setRecipeName('');
+        setShortDescription('');
+        setImage(null);
+        setNumberOfServings('');
+        setDescription('');
+        setIngredients([{}]);
+        setSelectedIngredients(['']);
+        setSelectedUnits(['']);
+    };
+
+    const handleModalClose = () => {
+        handleClose();
+        resetForm();
+    };
+
+    const handleAddRecipe = async () => {
+        try {
+            const formattedIngredients = ingredients.map((_, index) => ({
+                name: selectedIngredients[index],
+                quantity: numberOfServings,
+                unit: selectedUnits[index]
+            }));
+
+            await createRecipe(recipeName, formattedIngredients, description, shortDescription, "currentUser", image);
+
+            handleModalClose();
+        } catch (error) {
+            console.error("Failed to create recipe:", error.message);
+        }
+    };
 
     return (
         <>
-            <Modal show={show} onHide={handleClose} size="xl">
+            <Modal show={show} onHide={handleModalClose} size="xl" onExited={resetForm}>
                 <Modal.Header closeButton>
                     <Modal.Title>Add New Recipe</Modal.Title>
                 </Modal.Header>
@@ -50,12 +102,16 @@ export default function DialogAddRecipe({ show, handleClose }) {
                                 id="name"
                                 placeholder="Name"
                                 type="text"
+                                value={recipeName}
+                                onChange={(e) => setRecipeName(e.target.value)}
                             />
                             <Form.Control
                                 className="mb-3 mt-3"
                                 id="short"
                                 placeholder="Short Description"
                                 type="text"
+                                value={shortDescription}
+                                onChange={(e) => setShortDescription(e.target.value)}
                             />
                             <Form.Control
                                 className="mb-3 mt-3"
@@ -63,11 +119,14 @@ export default function DialogAddRecipe({ show, handleClose }) {
                                 placeholder="Recipe image"
                                 type="file"
                                 accept="image/png, image/jpeg"
+                                onChange={(e) => setImage(e.target.files[0])}
                             />
                             <Form.Control
                                 id="numberOfServings"
                                 placeholder="Number of servings"
                                 type="number"
+                                value={numberOfServings}
+                                onChange={(e) => setNumberOfServings(e.target.value)}
                             />
                         </Form.Group>
 
@@ -85,14 +144,21 @@ export default function DialogAddRecipe({ show, handleClose }) {
                                     className="mb-2 d-flex flex-row flex-grow-1"
                                 >
                                     <Dropdown>
-                                        <Dropdown.Toggle variant="success" id={`dropdown-block-${index}`}>
-                                            Select ingredients
+                                        <Dropdown.Toggle
+                                            id={`dropdown-block-${index}`}
+                                            className="custom-dropdown-toggle"
+                                            style={{ backgroundColor: '#f5e0b3', color: '#000' }}
+                                        >
+                                            {selectedIngredients[index] || 'Select ingredients'}
                                         </Dropdown.Toggle>
 
                                         <PortalDropDownMenu>
                                             <Dropdown.Menu className="custom-dropdown-menu">
                                                 {availableIngredients.map((ingredient, i) => (
-                                                    <Dropdown.Item key={i} href={`#/action-${i}`}>
+                                                    <Dropdown.Item
+                                                        key={i}
+                                                        onClick={() => handleSelectIngredient(index, ingredient.name)}
+                                                    >
                                                         {ingredient.name}
                                                     </Dropdown.Item>
                                                 ))}
@@ -105,16 +171,24 @@ export default function DialogAddRecipe({ show, handleClose }) {
                                         placeholder="Quantity"
                                     />
                                     <Dropdown>
-                                        <Dropdown.Toggle variant="success" id={`dropdown-units-${index}`}>
-                                            Select Units
+                                        <Dropdown.Toggle
+                                            id={`dropdown-units-${index}`}
+                                            className="custom-dropdown-toggle"
+                                            style={{ backgroundColor: '#f5e0b3', color: '#000' }}
+                                        >
+                                            {selectedUnits[index] || 'Select Units'}
                                         </Dropdown.Toggle>
 
                                         <PortalDropDownMenu>
                                             <Dropdown.Menu className="custom-dropdown-menu">
-                                                <Dropdown.Item href="#/action-1">Pieces</Dropdown.Item>
-                                                <Dropdown.Item href="#/action-2">ml</Dropdown.Item>
-                                                <Dropdown.Item href="#/action-3">mg</Dropdown.Item>
-                                                <Dropdown.Item href="#/action-4">kg</Dropdown.Item>
+                                                {['Pieces', 'ml', 'mg', 'kg'].map((unit, i) => (
+                                                    <Dropdown.Item
+                                                        key={i}
+                                                        onClick={() => handleSelectUnit(index, unit)}
+                                                    >
+                                                        {unit}
+                                                    </Dropdown.Item>
+                                                ))}
                                             </Dropdown.Menu>
                                         </PortalDropDownMenu>
                                     </Dropdown>
@@ -137,15 +211,17 @@ export default function DialogAddRecipe({ show, handleClose }) {
                                 as="textarea"
                                 placeholder="Description"
                                 rows={3}
+                                value={description}
+                                onChange={(e) => setDescription(e.target.value)}
                             />
                         </Form.Group>
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={handleClose}>
+                    <Button variant="secondary" onClick={handleModalClose}>
                         Close
                     </Button>
-                    <Button variant="primary" onClick={handleClose}>
+                    <Button variant="primary" onClick={handleAddRecipe}>
                         Add Recipe
                     </Button>
                 </Modal.Footer>

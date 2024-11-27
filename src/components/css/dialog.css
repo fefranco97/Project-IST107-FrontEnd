@@ -16,3 +16,10 @@
     position: fixed;
     background-color: white;
 }
+
+.custom-dropdown-toggle {
+    border: none !important;
+    background-color: #f5e0b3 !important;
+    color: #000 !important;
+    box-shadow: none !important;
+}
