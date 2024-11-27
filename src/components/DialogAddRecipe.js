@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import { BsTrash, BsPlusCircle } from 'react-icons/bs';
 import './css/dialog.css';
 import { getIngredients } from "../api/recipe";
+import PortalDropDownMenu from './PortalDropDownMenu';
 
 export default function DialogAddRecipe({ show, handleClose }) {
     const [ingredients, setIngredients] = useState([{}]);
@@ -21,12 +22,14 @@ export default function DialogAddRecipe({ show, handleClose }) {
             }
         };
 
-        ingredientsForSelect().then((res) => {});
+        ingredientsForSelect();
     }, []);
+
 
     const handleAddNewIngredients = () => {
         setIngredients([...ingredients, {}]);
     }
+
 
     const handleDeleteIngredients = (index) => {
         if (ingredients.length > 1) {
@@ -86,11 +89,15 @@ export default function DialogAddRecipe({ show, handleClose }) {
                                             Select ingredients
                                         </Dropdown.Toggle>
 
-                                        <Dropdown.Menu>
-                                            <Dropdown.Item>Apple</Dropdown.Item>
-                                            <Dropdown.Item>Orange</Dropdown.Item>
-                                            <Dropdown.Item>Banana</Dropdown.Item>
-                                        </Dropdown.Menu>
+                                        <PortalDropDownMenu>
+                                            <Dropdown.Menu className="custom-dropdown-menu">
+                                                {availableIngredients.map((ingredient, i) => (
+                                                    <Dropdown.Item key={i} href={`#/action-${i}`}>
+                                                        {ingredient.name}
+                                                    </Dropdown.Item>
+                                                ))}
+                                            </Dropdown.Menu>
+                                        </PortalDropDownMenu>
                                     </Dropdown>
                                     <Form.Control
                                         className="mx-2"
@@ -102,12 +109,14 @@ export default function DialogAddRecipe({ show, handleClose }) {
                                             Select Units
                                         </Dropdown.Toggle>
 
-                                        <Dropdown.Menu>
-                                            <Dropdown.Item href="#/action-1">Pieces</Dropdown.Item>
-                                            <Dropdown.Item href="#/action-2">ml</Dropdown.Item>
-                                            <Dropdown.Item href="#/action-3">mg</Dropdown.Item>
-                                            <Dropdown.Item href="#/action-4">kg</Dropdown.Item>
-                                        </Dropdown.Menu>
+                                        <PortalDropDownMenu>
+                                            <Dropdown.Menu className="custom-dropdown-menu">
+                                                <Dropdown.Item href="#/action-1">Pieces</Dropdown.Item>
+                                                <Dropdown.Item href="#/action-2">ml</Dropdown.Item>
+                                                <Dropdown.Item href="#/action-3">mg</Dropdown.Item>
+                                                <Dropdown.Item href="#/action-4">kg</Dropdown.Item>
+                                            </Dropdown.Menu>
+                                        </PortalDropDownMenu>
                                     </Dropdown>
                                     {ingredients.length > 1 &&
                                         <Button

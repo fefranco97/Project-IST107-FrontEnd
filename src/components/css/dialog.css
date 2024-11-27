@@ -3,7 +3,16 @@
 }
 
 .ingredients-container {
-    max-height: 100px;
+    max-height: 300px;
     overflow-y: auto;
     padding-right: 5px;
+}
+
+.custom-dropdown-menu {
+    z-index: 1070 !important;
+    max-height: 200px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    position: fixed;
+    background-color: white;
 }
