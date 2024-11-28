@@ -4,8 +4,10 @@ import Button from 'react-bootstrap/Button'
 import { LoginWithEmail, SignInWithGoogle } from '../api/user'
 import toast from 'react-hot-toast'
 import './css/logIn.css'
+import { useAuth } from '../provider/auth-provider'
 
 export default function DialogLogIn({ show, handleClose }) {
+  const { login } = useAuth()
   const handleLogin = async () => {
     const email = document.getElementById('email').value
     const password = document.getElementById('password').value
@@ -16,7 +18,8 @@ export default function DialogLogIn({ show, handleClose }) {
     }
 
     try {
-      await LoginWithEmail(email, password)
+      const { accessToken, user } = await LoginWithEmail(email, password)
+      login(user, accessToken)
       handleClose()
       toast.success('Login successfully')
     } catch (error) {
@@ -27,7 +30,8 @@ export default function DialogLogIn({ show, handleClose }) {
 
   const handleLoginWithGoogle = async () => {
     try {
-      await SignInWithGoogle()
+      const { idToken, responseData } = await SignInWithGoogle()
+      login(responseData.user, idToken)
       handleClose()
       toast.success('Login successfully')
     } catch (error) {
@@ -39,7 +43,7 @@ export default function DialogLogIn({ show, handleClose }) {
     <>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Sign Up</Modal.Title>
+          <Modal.Title>Log In</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>

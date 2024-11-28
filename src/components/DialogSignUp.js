@@ -4,8 +4,10 @@ import Modal from 'react-bootstrap/Modal'
 import './css/dialog.css'
 import { CreateUser } from '../api/user'
 import toast from 'react-hot-toast'
+import { useAuth } from '../provider/auth-provider'
 
 export default function DialogSignUp({ show, handleClose }) {
+  const { login } = useAuth()
   const handleSignUp = async () => {
     const name = document.getElementById('name').value
     const email = document.getElementById('email').value
@@ -17,7 +19,9 @@ export default function DialogSignUp({ show, handleClose }) {
     }
 
     try {
-      await CreateUser(name, email, password)
+      const response = await CreateUser(name, email, password)
+
+      login({ email: response.email, id: response.id, name: response.name }, response.id)
       handleClose()
       toast.success('User created successfully')
     } catch (error) {

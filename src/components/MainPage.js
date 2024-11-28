@@ -10,25 +10,27 @@ import DialogLogIn from './DialogLogIn'
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 import RecipeDetail from './RecipeDetail'
 import AccountDetail from './AccountDetail'
-import {getAllRecipes, getRecipe} from "../api/recipe";
+import { getAllRecipes, getRecipe } from '../api/recipe'
+import { useAuth } from '../provider/auth-provider'
 
 function MainPage() {
   const [showAddDialog, setShowAddDialog] = useState(false)
   const [showSignUpDialog, setShowSignUpDialog] = useState(false)
   const [showLogInDialog, setShowLogInDialog] = useState(false)
 
+  const { user, logout } = useAuth()
   const [recipes, setRecipes] = useState([])
 
   useEffect(() => {
     const data = async () => {
-      const resp = await getAllRecipes();
-      if(resp) {
+      const resp = await getAllRecipes()
+      if (resp) {
         setRecipes(resp.data)
       }
     }
 
     const recipe = async () => {
-      const resp = await getRecipe("12f66150-13b4-4490-b421-8c0f5130053e");
+      const resp = await getRecipe('12f66150-13b4-4490-b421-8c0f5130053e')
       console.log(resp)
     }
 
@@ -62,20 +64,43 @@ function MainPage() {
                 <Nav.Link as={Link} to="/">
                   Home
                 </Nav.Link>
-                <Nav.Link as={Link} to="/account">
-                  Account
-                </Nav.Link>
+
+                {user ? (
+                  <Nav.Link as={Link} to="/account">
+                    Account
+                  </Nav.Link>
+                ) : (
+                  ''
+                )}
               </div>
               <div>
-                <Button variant="primary" onClick={() => setShowAddDialog(true)}>
-                  Add Recipe
-                </Button>
+                {user ? (
+                  <Button variant="primary" onClick={() => setShowAddDialog(true)}>
+                    Add Recipe
+                  </Button>
+                ) : (
+                  ''
+                )}
+
                 <Button className="mx-2" variant="secondary" onClick={() => setShowSignUpDialog(true)}>
                   Sign Up
                 </Button>
-                <Button className="mr-2" variant="secondary" onClick={() => setShowLogInDialog(true)}>
-                  Log In
-                </Button>
+
+                {user ? (
+                  <Button className="mr-2" variant="secondary" onClick={() => logout()}>
+                    Log Out
+                  </Button>
+                ) : (
+                  <Button className="mr-2" variant="secondary" onClick={() => setShowLogInDialog(true)}>
+                    Log In
+                  </Button>
+                )}
+
+                {user && user.photoURL ? (
+                  <img src={user.photoURL} class="rounded-circle shadow-4 mx-3" style={{ width: 36 }} alt="Avatar" />
+                ) : (
+                  ''
+                )}
               </div>
             </Nav>
           </Navbar.Collapse>

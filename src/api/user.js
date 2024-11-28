@@ -24,9 +24,28 @@ async function CreateUser(name, email, password) {
 
 async function LoginWithEmail(email, password) {
   const auth = getAuth()
-  const result = await signInWithEmailAndPassword(auth, email, password)
-  const user = result.user
-  console.log(user)
+
+  const options = {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  }
+
+  const url = config.isDevelopmentEnv
+    ? `${config.apiBaseUrl.development}/user?email=${email}`
+    : `https://user${config.apiBaseUrl.production}?email=${email}`
+
+  try {
+    const loginAuth = await signInWithEmailAndPassword(auth, email, password)
+    const response = await fetch(url, options)
+    const responseData = await response.json()
+
+    if (responseData.status !== 'success') {
+      throw new Error(responseData.message)
+    }
+    return { accessToken: loginAuth.user.accessToken, user: responseData.data[0] }
+  } catch (error) {
+    console.error('Failed to fetch user:', error.message)
+  }
 }
 
 async function SignInWithGoogle() {
@@ -54,7 +73,7 @@ async function SignInWithGoogle() {
     throw new Error(responseData.message)
   }
 
-  return responseData
+  return { idToken, responseData }
 }
 
 export { CreateUser, SignInWithGoogle, LoginWithEmail }
