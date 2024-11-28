@@ -29,13 +29,7 @@ function MainPage() {
       }
     }
 
-    const recipe = async () => {
-      const resp = await getRecipe('12f66150-13b4-4490-b421-8c0f5130053e')
-      console.log(resp)
-    }
-
     data().then((data) => {})
-    recipe().then(() => {})
   }, [])
 
   const handleCloseAddDialog = () => {

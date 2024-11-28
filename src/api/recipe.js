@@ -1,78 +1,88 @@
-import {config} from "../config/config";
+import { config } from '../config/config'
 
 async function getAllRecipes() {
-    const options = {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-    }
+  const options = {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  }
 
+  const url = `https://getAllRecipes${config.apiBaseUrl.production}`
 
-    const url = `https://getAllRecipes${config.apiBaseUrl.production}`
+  const response = await fetch(url, options)
+  const responseData = await response.json()
 
-    const response = await fetch(url, options)
-    const responseData = await response.json()
+  if (responseData.status !== 'success') {
+    throw new Error(responseData.message)
+  }
 
-    if (responseData.status !== 'success') {
-        throw new Error(responseData.message)
-    }
-
-    return responseData
+  return responseData
 }
 
 async function getRecipe(id) {
-    const options = {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-    }
+  const options = {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  }
 
-    const url = `https://getRecipeDetails${config.apiBaseUrl.production}?id=${id}`;
-    console.log("Request URL:", url);
+  const url = `https://getRecipeDetails${config.apiBaseUrl.production}?id=${id}`
 
-    const response = await fetch(url, options)
-    const responseData = await response.json()
+  const response = await fetch(url, options)
+  const responseData = await response.json()
 
-    if (responseData.status !== 'success') {
-        throw new Error(responseData.message)
-    }
+  if (responseData.status !== 'success') {
+    throw new Error(responseData.message)
+  }
 
-    return responseData
+  return responseData
 }
 
 async function getIngredients() {
-    const options = {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-    }
+  const options = {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  }
 
-    const url = `https://ingredients${config.apiBaseUrl.production}`
+  const url = `https://ingredients${config.apiBaseUrl.production}`
 
-    const response = await fetch(url, options)
+  const response = await fetch(url, options)
+  const responseData = await response.json()
+
+  if (responseData.status !== 'success') {
+    throw new Error(responseData.message)
+  }
+
+  return responseData
+}
+
+async function createRecipe(title, ingredients, instructions, short, user, img) {
+  const formData = new FormData()
+  formData.append('title', title)
+  formData.append('ingredients', JSON.stringify(ingredients))
+  formData.append('instructions', instructions)
+  formData.append('short', short)
+  formData.append('user', user)
+  formData.append('img', img)
+
+  const url = config.isDevelopmentEnv
+    ? `${config.apiBaseUrl.development}/createRecipe`
+    : `https://createRecipe${config.apiBaseUrl.production}`
+
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      body: formData,
+    })
+
     const responseData = await response.json()
-
     if (responseData.status !== 'success') {
-        throw new Error(responseData.message)
+      throw new Error(responseData.message)
     }
 
     return responseData
+  } catch (error) {
+    console.error('Erro ao criar receita:', error)
+    throw error
+  }
 }
 
-async function createRecipe(title, ingredients, instruction, short, user, img) {
-    const options = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({title, ingredients, instruction, short, user, img}),
-    }
-
-    const url = `https://createRecipe${config.apiBaseUrl.production}`
-
-    const response = await fetch(url, options)
-    const responseData = await response.json()
-
-    if (responseData.status !== 'success') {
-        throw new Error(responseData.message)
-    }
-
-    return responseData
-}
-
-export {getAllRecipes, createRecipe, getIngredients, getRecipe}
+export { getAllRecipes, createRecipe, getIngredients, getRecipe }
