@@ -10,7 +10,7 @@ import DialogLogIn from './DialogLogIn'
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 import RecipeDetail from './RecipeDetail'
 import AccountDetail from './AccountDetail'
-import { getAllRecipes, getRecipe } from '../api/recipe'
+import { getAllRecipes } from '../api/recipe'
 import { useAuth } from '../provider/auth-provider'
 
 function MainPage() {
