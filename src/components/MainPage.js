@@ -32,8 +32,12 @@ function MainPage() {
     data().then((data) => {})
   }, [])
 
-  const handleCloseAddDialog = () => {
+  const handleCloseAddDialog = async () => {
     setShowAddDialog(false)
+    const resp = await getAllRecipes()
+    if (resp) {
+      setRecipes(resp.data)
+    }
   }
 
   const handleCloseSignUpDialog = async () => {
