@@ -12,6 +12,7 @@ import RecipeDetail from './RecipeDetail'
 import AccountDetail from './AccountDetail'
 import { getAllRecipes } from '../api/recipe'
 import { useAuth } from '../provider/auth-provider'
+import './css/mainPage.css'
 
 function MainPage() {
   const [showAddDialog, setShowAddDialog] = useState(false)
@@ -50,7 +51,7 @@ function MainPage() {
 
   return (
     <Router>
-      <Navbar expand="lg" className="bg-body-tertiary gap-4">
+      <Navbar expand="lg" className="bg-primary gap-4">
         <Container>
           <Navbar.Brand as={Link} to="/">
             Recipes Book
@@ -73,7 +74,7 @@ function MainPage() {
               </div>
               <div>
                 {user ? (
-                  <Button variant="primary" onClick={() => setShowAddDialog(true)}>
+                  <Button variant="secondary" onClick={() => setShowAddDialog(true)}>
                     Add Recipe
                   </Button>
                 ) : (

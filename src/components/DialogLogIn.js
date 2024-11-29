@@ -54,13 +54,13 @@ export default function DialogLogIn({ show, handleClose }) {
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
+          <Button variant="secondary" onClick={handleClose} className="">
             Close
           </Button>
-          <Button variant="primary" onClick={handleLogin}>
+          <Button variant="primary" onClick={handleLogin} className="">
             Log In
           </Button>
-          <Button variant="google" onClick={handleLoginWithGoogle} className="google-btn">
+          <Button onClick={handleLoginWithGoogle} className="google-btn">
             <img src="https://img.icons8.com/color/48/000000/google-logo.png" alt="Google Logo"></img>
             <span>Login with Google</span>
           </Button>

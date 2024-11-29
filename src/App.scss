@@ -1,0 +1,24 @@
+@import '../node_modules/bootstrap/scss/functions';
+@import '../node_modules/bootstrap/scss/variables';
+
+$primary: #f5e0b3; // set the $primary variable
+$accent: #d28f2c; // set the $accent variable
+$secondary: #e57b3c; // set the $secondary variable
+$contrast: #333333; // set the $contrast variable
+$background: #f9f5ec; // set the $background variable
+$input-color: #f0eeee; // set the $input-color variable
+
+// merge with existing $theme-colors map
+$theme-colors: map-merge(
+  $theme-colors,
+  (
+    'primary': $primary,
+    'secondary': $secondary,
+    'accent': $accent,
+    'contrast': $contrast,
+    'background': $background,
+    'input-color': $input-color,
+  )
+);
+
+@import '../node_modules/bootstrap/scss/bootstrap';
