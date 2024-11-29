@@ -8,6 +8,8 @@ import './css/dialog.css'
 import { getIngredients, createRecipe } from '../api/recipe'
 import PortalDropDownMenu from './PortalDropDownMenu'
 import { useAuth } from '../provider/auth-provider'
+import toast from 'react-hot-toast'
+import { Spinner } from 'react-bootstrap'
 
 export default function DialogAddRecipe({ show, handleClose }) {
   const [recipeName, setRecipeName] = useState('')
@@ -19,6 +21,8 @@ export default function DialogAddRecipe({ show, handleClose }) {
   const [availableIngredients, setAvailableIngredients] = useState([])
   const [selectedIngredients, setSelectedIngredients] = useState([])
   const [selectedUnits, setSelectedUnits] = useState([])
+
+  const [isCreating, setIsCreating] = useState(false)
 
   const { user } = useAuth()
 
@@ -78,6 +82,7 @@ export default function DialogAddRecipe({ show, handleClose }) {
 
   const handleAddRecipe = async () => {
     try {
+      setIsCreating(true)
       const formattedIngredients = ingredients.map((_, index) => ({
         name: selectedIngredients[index],
         quantity: numberOfServings,
@@ -87,7 +92,10 @@ export default function DialogAddRecipe({ show, handleClose }) {
       await createRecipe(recipeName, formattedIngredients, description, shortDescription, user.id, image)
 
       handleModalClose()
+      setIsCreating(false)
     } catch (error) {
+      toast.error(error.message)
+      setIsCreating(false)
       console.error('Failed to create recipe:', error.message)
     }
   }
@@ -204,8 +212,15 @@ export default function DialogAddRecipe({ show, handleClose }) {
           <Button variant="secondary" onClick={handleModalClose}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleAddRecipe}>
-            Add Recipe
+
+          <Button variant="primary" onClick={handleAddRecipe} disabled={isCreating}>
+            {isCreating ? (
+              <Spinner animation="border" role="status" size="sm" className="p-2">
+                <span className="visually-hidden">Loading...</span>
+              </Spinner>
+            ) : (
+              'Add Recipe'
+            )}
           </Button>
         </Modal.Footer>
       </Modal>
