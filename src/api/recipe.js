@@ -36,6 +36,24 @@ async function getRecipe(id) {
   return responseData
 }
 
+async function getUserRecipes(userId) {
+  const options = {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' }
+  }
+
+  const url = `https://getUserRecipes${config.apiBaseUrl.production}?userId=${userId}`
+
+  const response = await fetch(url, options)
+  const responseData = await  response.json()
+
+  if(responseData.status !== 'success') {
+     throw new Error(responseData.message)
+  }
+
+  return responseData
+}
+
 async function getIngredients() {
   const options = {
     method: 'GET',
@@ -85,4 +103,4 @@ async function createRecipe(title, ingredients, instructions, short, user, img) 
   }
 }
 
-export { getAllRecipes, createRecipe, getIngredients, getRecipe }
+export { getAllRecipes, createRecipe, getIngredients, getRecipe, getUserRecipes }

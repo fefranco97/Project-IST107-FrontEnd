@@ -1,11 +1,30 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import Container from 'react-bootstrap/Container';
 import Card from 'react-bootstrap/Card';
 import Form from "react-bootstrap/Form";
 import {Col, Row} from "react-bootstrap";
 import Button from "react-bootstrap/Button";
+import {getUserRecipes} from "../api/recipe";
+import {useAuth} from "../provider/auth-provider";
+import RecipesList from "./RecipesList";
 
 export default function AccountDetail() {
+
+    const { user } =  useAuth();
+    const [userRecipes, setUserRecipes ] = useState([])
+
+    useEffect(() => {
+        const userAllRecipes = async () => {
+            const res = await getUserRecipes(user.id)
+            if(res) {
+                setUserRecipes(res.data)
+            }
+            console.log(userRecipes)
+        }
+
+        userAllRecipes().then(() => {})
+    }, []);
+
     return (
         <Container className="mt-5">
             <Row className="mb-3">
@@ -44,7 +63,6 @@ export default function AccountDetail() {
                 <Col>
                     <Card style={{ padding: "30px", textAlign: "center"}}>
                         <Card.Text style={{ color: '#a09a9a'}}>
-                            List of Recipes
                         </Card.Text>
                     </Card>
                 </Col>
