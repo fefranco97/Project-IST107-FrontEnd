@@ -112,7 +112,7 @@ function MainPage() {
           element={
             <div>
               <div className="mt-3 ml-3">
-                <RecipesList recipes={recipes} />
+                <RecipesList recipes={recipes} showLoadingAnimation={true} />
               </div>
               <DialogAddRecipe show={showAddDialog} handleClose={handleCloseAddDialog} />
               <DialogSignUp show={showSignUpDialog} handleClose={handleCloseSignUpDialog} />
@@ -121,7 +121,7 @@ function MainPage() {
           }
         />
         <Route path="/recipe/:id" element={<RecipeDetail recipes={recipes} />} />
-        <Route path="/account" element={<AccountDetail />} />
+        <Route path="/account" element={<AccountDetail logInUser={user}/>} />
       </Routes>
     </Router>
   )

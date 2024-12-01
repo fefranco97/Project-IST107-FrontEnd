@@ -103,4 +103,22 @@ async function createRecipe(title, ingredients, instructions, short, user, img) 
   }
 }
 
-export { getAllRecipes, createRecipe, getIngredients, getRecipe, getUserRecipes }
+async function deleteRecipe(recipeId) {
+   const options = {
+     method: 'DELETE',
+     headers: { 'Content-Type': 'application/json' },
+   }
+
+  const url = `https://deleteRecipe${config.apiBaseUrl.production}?id=${recipeId}`
+
+  const response = await fetch(url, options)
+  const responseData = await response.json()
+
+  if (responseData.status !== 'success') {
+    throw new Error(responseData.message)
+  }
+
+  return responseData
+}
+
+export { getAllRecipes, createRecipe, getIngredients, getRecipe, getUserRecipes, deleteRecipe }

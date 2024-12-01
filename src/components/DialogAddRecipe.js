@@ -4,6 +4,7 @@ import Modal from 'react-bootstrap/Modal'
 import Dropdown from 'react-bootstrap/Dropdown'
 import { useState, useEffect } from 'react'
 import { BsTrash, BsPlusCircle } from 'react-icons/bs'
+import { GiRoastChicken } from "react-icons/gi";
 import './css/dialog.css'
 import { getIngredients, createRecipe } from '../api/recipe'
 import PortalDropDownMenu from './PortalDropDownMenu'
@@ -22,7 +23,7 @@ export default function DialogAddRecipe({ show, handleClose }) {
   const [selectedIngredients, setSelectedIngredients] = useState([])
   const [selectedUnits, setSelectedUnits] = useState([])
 
-  const [isCreating, setIsCreating] = useState(false)
+  const [isCreating, setIsCreating] = useState(true)
 
   const { user } = useAuth()
 
@@ -215,9 +216,9 @@ export default function DialogAddRecipe({ show, handleClose }) {
 
           <Button variant="primary" onClick={handleAddRecipe} disabled={isCreating}>
             {isCreating ? (
-              <Spinner animation="border" role="status" size="sm" className="p-2">
-                <span className="visually-hidden">Loading...</span>
-              </Spinner>
+                <div className="d-flex align-items-center justify-content-center">
+                    <GiRoastChicken className="icon-spin" style={{ fontSize: "1.5rem", color: '#e57b3c' }} />
+                </div>
             ) : (
               'Add Recipe'
             )}
