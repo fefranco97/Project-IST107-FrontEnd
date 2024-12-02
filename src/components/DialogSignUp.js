@@ -6,6 +6,7 @@ import { CreateUser } from '../api/user'
 import toast from 'react-hot-toast'
 import { useAuth } from '../provider/auth-provider'
 import { useState } from 'react'
+import { GiRoastChicken } from 'react-icons/gi'
 
 export default function DialogSignUp({ show, handleClose }) {
   const [isCreating, setIsCreating] = useState(false)

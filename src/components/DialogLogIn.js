@@ -6,6 +6,7 @@ import toast from 'react-hot-toast'
 import './css/logIn.css'
 import { useAuth } from '../provider/auth-provider'
 import { useState } from 'react'
+import { GiRoastChicken } from 'react-icons/gi'
 
 export default function DialogLogIn({ show, handleClose }) {
   const [isCreating, setIsCreating] = useState(false)
