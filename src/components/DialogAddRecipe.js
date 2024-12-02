@@ -4,13 +4,12 @@ import Modal from 'react-bootstrap/Modal'
 import Dropdown from 'react-bootstrap/Dropdown'
 import { useState, useEffect } from 'react'
 import { BsTrash, BsPlusCircle } from 'react-icons/bs'
-import { GiRoastChicken } from "react-icons/gi";
+import { GiRoastChicken } from 'react-icons/gi'
 import './css/dialog.css'
 import { getIngredients, createRecipe } from '../api/recipe'
 import PortalDropDownMenu from './PortalDropDownMenu'
 import { useAuth } from '../provider/auth-provider'
 import toast from 'react-hot-toast'
-import { Spinner } from 'react-bootstrap'
 
 export default function DialogAddRecipe({ show, handleClose }) {
   const [recipeName, setRecipeName] = useState('')
@@ -216,9 +215,9 @@ export default function DialogAddRecipe({ show, handleClose }) {
 
           <Button variant="primary" onClick={handleAddRecipe} disabled={isCreating}>
             {isCreating ? (
-                <div className="d-flex align-items-center justify-content-center">
-                    <GiRoastChicken className="icon-spin" style={{ fontSize: "1.5rem", color: '#e57b3c' }} />
-                </div>
+              <div className="d-flex align-items-center justify-content-center">
+                <GiRoastChicken className="icon-spin" style={{ fontSize: '1.5rem', color: '#e57b3c' }} />
+              </div>
             ) : (
               'Add Recipe'
             )}
