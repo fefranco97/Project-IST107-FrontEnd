@@ -10,6 +10,7 @@ import { GiRoastChicken } from 'react-icons/gi'
 
 export default function DialogLogIn({ show, handleClose }) {
   const [isCreating, setIsCreating] = useState(false)
+  const [isLoadingGoogle, setIsLoadingGoogle] = useState(false)
   const { login } = useAuth()
 
   const handleLogin = async () => {
@@ -37,18 +38,18 @@ export default function DialogLogIn({ show, handleClose }) {
   }
 
   const handleLoginWithGoogle = async () => {
-    setIsCreating(true)
+    setIsLoadingGoogle(true)
     try {
       const { idToken, responseData } = await SignInWithGoogle()
       login(responseData.user, idToken)
       handleClose()
       toast.success('Login successfully')
-      setIsCreating(false)
+      setIsLoadingGoogle(false)
     } catch (error) {
       toast.error(error.message)
       console.error(error)
     } finally {
-      setIsCreating(false)
+      setIsLoadingGoogle(false)
     }
   }
   return (
@@ -80,7 +81,15 @@ export default function DialogLogIn({ show, handleClose }) {
           </Button>
           <Button onClick={handleLoginWithGoogle} className="google-btn">
             <img src="https://img.icons8.com/color/48/000000/google-logo.png" alt="Google Logo"></img>
-            <span>Login with Google</span>
+            <span>
+              {isLoadingGoogle ? (
+                <div className="d-flex align-items-center justify-content-center">
+                  <GiRoastChicken className="icon-spin" style={{ fontSize: '1.5rem', color: '#e57b3c' }} />
+                </div>
+              ) : (
+                'Login with Google'
+              )}
+            </span>
           </Button>
         </Modal.Footer>
       </Modal>

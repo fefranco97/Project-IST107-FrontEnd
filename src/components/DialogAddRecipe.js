@@ -20,6 +20,7 @@ export default function DialogAddRecipe({ show, handleClose }) {
   const [ingredients, setIngredients] = useState([{}])
   const [availableIngredients, setAvailableIngredients] = useState([])
   const [selectedIngredients, setSelectedIngredients] = useState([])
+  const [selectedQuantity, setSelectedQuantity] = useState([])
   const [selectedUnits, setSelectedUnits] = useState([])
 
   const [isCreating, setIsCreating] = useState(false)
@@ -42,6 +43,7 @@ export default function DialogAddRecipe({ show, handleClose }) {
     setIngredients([...ingredients, {}])
     setSelectedIngredients([...selectedIngredients, ''])
     setSelectedUnits([...selectedUnits, ''])
+    setSelectedQuantity([...selectedQuantity, ''])
   }
 
   const handleDeleteIngredients = (index) => {
@@ -49,6 +51,7 @@ export default function DialogAddRecipe({ show, handleClose }) {
       setIngredients(ingredients.filter((_, i) => i !== index))
       setSelectedIngredients(selectedIngredients.filter((_, i) => i !== index))
       setSelectedUnits(selectedUnits.filter((_, i) => i !== index))
+      setSelectedQuantity(selectedQuantity.filter((_, i) => i !== index))
     }
   }
 
@@ -64,6 +67,12 @@ export default function DialogAddRecipe({ show, handleClose }) {
     setSelectedUnits(newSelectedUnits)
   }
 
+  const handleQuantityChange = (index, ingredientQuantity) => {
+    const newSelectedQuantity = [...selectedQuantity]
+    newSelectedQuantity[index] = ingredientQuantity
+    setSelectedQuantity(newSelectedQuantity)
+  }
+
   const resetForm = () => {
     setRecipeName('')
     setShortDescription('')
@@ -73,6 +82,7 @@ export default function DialogAddRecipe({ show, handleClose }) {
     setIngredients([{}])
     setSelectedIngredients([''])
     setSelectedUnits([''])
+    setSelectedQuantity([''])
   }
 
   const handleModalClose = () => {
@@ -84,10 +94,16 @@ export default function DialogAddRecipe({ show, handleClose }) {
     try {
       setIsCreating(true)
       const formattedIngredients = ingredients.map((_, index) => ({
-        name: selectedIngredients[index],
-        quantity: numberOfServings,
+        id: selectedIngredients[index],
+        quantity: selectedQuantity[index],
         unit: selectedUnits[index],
       }))
+
+      console.log(selectedQuantity)
+      console.log(selectedIngredients)
+      console.log(selectedUnits)
+
+      console.log(formattedIngredients)
 
       await createRecipe(recipeName, formattedIngredients, description, shortDescription, user.id, image)
 
@@ -162,15 +178,23 @@ export default function DialogAddRecipe({ show, handleClose }) {
 
                     <PortalDropDownMenu>
                       <Dropdown.Menu className="custom-dropdown-menu">
-                        {availableIngredients.map((ingredient, i) => (
-                          <Dropdown.Item key={i} onClick={() => handleSelectIngredient(index, ingredient.name)}>
-                            {ingredient.name}
-                          </Dropdown.Item>
-                        ))}
+                        {availableIngredients
+                          .sort((a, b) => a.name.localeCompare(b.name))
+                          .map((ingredient, i) => (
+                            <Dropdown.Item key={i} onClick={() => handleSelectIngredient(index, ingredient.name)}>
+                              {ingredient.name}
+                            </Dropdown.Item>
+                          ))}
                       </Dropdown.Menu>
                     </PortalDropDownMenu>
                   </Dropdown>
-                  <Form.Control className="mx-2 text-black" type="number" placeholder="Quantity" />
+                  <Form.Control
+                    className="mx-2 text-black"
+                    type="number"
+                    placeholder="Quantity"
+                    value={selectedQuantity[index] || ''}
+                    onChange={(e) => handleQuantityChange(index, e.target.value)}
+                  />
                   <Dropdown>
                     <Dropdown.Toggle
                       id={`dropdown-units-${index}`}
@@ -181,11 +205,13 @@ export default function DialogAddRecipe({ show, handleClose }) {
 
                     <PortalDropDownMenu>
                       <Dropdown.Menu className="custom-dropdown-menu">
-                        {['Pieces', 'ml', 'mg', 'g', 'kg', 'As you wish', 'Tablespoon', 'Cup'].map((unit, i) => (
-                          <Dropdown.Item key={i} onClick={() => handleSelectUnit(index, unit)}>
-                            {unit}
-                          </Dropdown.Item>
-                        ))}
+                        {['Pieces', 'ml', 'mg', 'g', 'kg', 'As you wish', 'Tablespoon', 'Cup', 'Unit']
+                          .sort()
+                          .map((unit, i) => (
+                            <Dropdown.Item key={i} onClick={() => handleSelectUnit(index, unit)}>
+                              {unit}
+                            </Dropdown.Item>
+                          ))}
                       </Dropdown.Menu>
                     </PortalDropDownMenu>
                   </Dropdown>

@@ -18,14 +18,15 @@ export default function RecipeDetail() {
       }
     }
     data().then((data) => {
-      console.log(data)
       setIsLoading(false)
     })
   }, [id])
 
   if (isLoading) {
     return (
-      <div className="d-flex align-items-center justify-content-center" style={{ backgroundColor: '#f8f0e3' }}>
+      <div
+        className="d-flex align-items-center justify-content-center"
+        style={{ height: '100vh', backgroundColor: '#f8f0e3' }}>
         <GiRoastChicken className="icon-spin" style={{ fontSize: '8rem', color: '#e57b3c' }} />
       </div>
     )
