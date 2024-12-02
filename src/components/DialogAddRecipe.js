@@ -181,7 +181,7 @@ export default function DialogAddRecipe({ show, handleClose }) {
 
                     <PortalDropDownMenu>
                       <Dropdown.Menu className="custom-dropdown-menu">
-                        {['Pieces', 'ml', 'mg', 'kg'].map((unit, i) => (
+                        {['Pieces', 'ml', 'mg', 'g', 'kg', 'As you wish', 'Tablespoon', 'Cup'].map((unit, i) => (
                           <Dropdown.Item key={i} onClick={() => handleSelectUnit(index, unit)}>
                             {unit}
                           </Dropdown.Item>

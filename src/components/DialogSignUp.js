@@ -5,10 +5,14 @@ import './css/dialog.css'
 import { CreateUser } from '../api/user'
 import toast from 'react-hot-toast'
 import { useAuth } from '../provider/auth-provider'
+import { useState } from 'react'
 
 export default function DialogSignUp({ show, handleClose }) {
+  const [isCreating, setIsCreating] = useState(false)
   const { login } = useAuth()
+
   const handleSignUp = async () => {
+    setIsCreating(true)
     const name = document.getElementById('name').value
     const email = document.getElementById('email').value
     const password = document.getElementById('password').value
@@ -27,6 +31,8 @@ export default function DialogSignUp({ show, handleClose }) {
     } catch (error) {
       toast.error(error.message)
       console.error(error)
+    } finally {
+      setIsCreating(false)
     }
   }
 
@@ -51,7 +57,13 @@ export default function DialogSignUp({ show, handleClose }) {
             Close
           </Button>
           <Button variant="primary" onClick={handleSignUp}>
-            Sign Up
+            {isCreating ? (
+              <div className="d-flex align-items-center justify-content-center">
+                <GiRoastChicken className="icon-spin" style={{ fontSize: '1.5rem', color: '#e57b3c' }} />
+              </div>
+            ) : (
+              'Sign Up'
+            )}
           </Button>
         </Modal.Footer>
       </Modal>
