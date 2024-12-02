@@ -21,7 +21,7 @@ export default function RecipeDetail() {
       console.log(data)
       setIsLoading(false)
     })
-  }, [])
+  }, [id])
 
   if (isLoading) {
     return (
