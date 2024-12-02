@@ -51,10 +51,11 @@ function MainPage() {
 
   return (
     <Router>
-      <Navbar expand="lg" className="bg-primary gap-4">
+      <Navbar expand="lg" className="bg-primary gap-4 p-2">
         <Container>
-          <Navbar.Brand as={Link} to="/">
-            Recipes Book
+          <img src="/images/logo.png" alt="Logo" style={{ width: 50, height: 50, marginRight: '0.5rem' }} />
+          <Navbar.Brand as={Link} to="/" className="font-bold" style={{ fontSize: '30px' }}>
+            Kniha Receptů
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
@@ -81,22 +82,31 @@ function MainPage() {
                   ''
                 )}
 
-                <Button className="mx-2" variant="secondary" onClick={() => setShowSignUpDialog(true)}>
-                  Sign Up
-                </Button>
+                {user ? (
+                  ''
+                ) : (
+                  <Button className="mx-2" variant="secondary" onClick={() => setShowSignUpDialog(true)}>
+                    Sign Up
+                  </Button>
+                )}
 
                 {user ? (
-                  <Button className="mr-2" variant="secondary" onClick={() => logout()}>
+                  <Button className="mx-2" variant="secondary" onClick={async () => await logout()}>
                     Log Out
                   </Button>
                 ) : (
-                  <Button className="mr-2" variant="secondary" onClick={() => setShowLogInDialog(true)}>
+                  <Button className="mx-2" variant="secondary" onClick={() => setShowLogInDialog(true)}>
                     Log In
                   </Button>
                 )}
 
                 {user && user.photoURL ? (
-                  <img src={user.photoURL} class="rounded-circle shadow-4 mx-3" style={{ width: 36 }} alt="Avatar" />
+                  <img
+                    src={user.photoURL}
+                    className="rounded-circle shadow-4 mx-3"
+                    style={{ width: 36 }}
+                    alt="Avatar"
+                  />
                 ) : (
                   ''
                 )}
@@ -111,17 +121,35 @@ function MainPage() {
           path="/"
           element={
             <div>
-              <div className="mt-3 ml-3">
-                <RecipesList recipes={recipes} showLoadingAnimation={true} />
-              </div>
+              <RecipesList recipes={recipes} showLoadingAnimation={true} />
               <DialogAddRecipe show={showAddDialog} handleClose={handleCloseAddDialog} />
               <DialogSignUp show={showSignUpDialog} handleClose={handleCloseSignUpDialog} />
               <DialogLogIn show={showLogInDialog} handleClose={handleCloseLogInDialog} />
             </div>
           }
         />
-        <Route path="/recipe/:id" element={<RecipeDetail recipes={recipes} />} />
-        <Route path="/account" element={<AccountDetail logInUser={user}/>} />
+        <Route
+          path="/recipe/:id"
+          element={
+            <>
+              <RecipeDetail recipes={recipes} />
+              <DialogAddRecipe show={showAddDialog} handleClose={handleCloseAddDialog} />
+              <DialogSignUp show={showSignUpDialog} handleClose={handleCloseSignUpDialog} />
+              <DialogLogIn show={showLogInDialog} handleClose={handleCloseLogInDialog} />
+            </>
+          }
+        />
+        <Route
+          path="/account"
+          element={
+            <>
+              <AccountDetail logInUser={user} />
+              <DialogAddRecipe show={showAddDialog} handleClose={handleCloseAddDialog} />
+              <DialogSignUp show={showSignUpDialog} handleClose={handleCloseSignUpDialog} />
+              <DialogLogIn show={showLogInDialog} handleClose={handleCloseLogInDialog} />
+            </>
+          }
+        />
       </Routes>
     </Router>
   )

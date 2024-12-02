@@ -22,7 +22,7 @@ export default function DialogAddRecipe({ show, handleClose }) {
   const [selectedIngredients, setSelectedIngredients] = useState([])
   const [selectedUnits, setSelectedUnits] = useState([])
 
-  const [isCreating, setIsCreating] = useState(true)
+  const [isCreating, setIsCreating] = useState(false)
 
   const { user } = useAuth()
 
@@ -114,10 +114,11 @@ export default function DialogAddRecipe({ show, handleClose }) {
                 placeholder="Name"
                 type="text"
                 value={recipeName}
+                className="text-black"
                 onChange={(e) => setRecipeName(e.target.value)}
               />
               <Form.Control
-                className="mb-3 mt-3"
+                className="mb-3 mt-3 text-black"
                 id="short"
                 placeholder="Short Description"
                 type="text"
@@ -125,7 +126,7 @@ export default function DialogAddRecipe({ show, handleClose }) {
                 onChange={(e) => setShortDescription(e.target.value)}
               />
               <Form.Control
-                className="mb-3 mt-3"
+                className="mb-3 mt-3 text-black"
                 id="picture"
                 placeholder="Recipe image"
                 type="file"
@@ -137,6 +138,7 @@ export default function DialogAddRecipe({ show, handleClose }) {
                 placeholder="Number of servings"
                 type="number"
                 value={numberOfServings}
+                className="text-black"
                 onChange={(e) => setNumberOfServings(e.target.value)}
               />
             </Form.Group>
@@ -168,7 +170,7 @@ export default function DialogAddRecipe({ show, handleClose }) {
                       </Dropdown.Menu>
                     </PortalDropDownMenu>
                   </Dropdown>
-                  <Form.Control className="mx-2" type="number" placeholder="Quantity" />
+                  <Form.Control className="mx-2 text-black" type="number" placeholder="Quantity" />
                   <Dropdown>
                     <Dropdown.Toggle
                       id={`dropdown-units-${index}`}
@@ -198,6 +200,7 @@ export default function DialogAddRecipe({ show, handleClose }) {
 
             <Form.Group className="mb-3">
               <Form.Control
+                className="text-black"
                 id="instruction"
                 as="textarea"
                 placeholder="Description"
